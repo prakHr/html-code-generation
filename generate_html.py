@@ -11,27 +11,35 @@ import itertools
 import shutil
 import random
 from multiprocessing import Manager
-
-from htbuilder import div
 from htbuilder import html,head,title,base,link,meta,style,body,header,nav,main,section,article,aside,footer,address,h1,h2,h3,h4,h5,h6,p,br,hr,pre,blockquote,div,span,a,abbr,b,bdi,bdo,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,strong,sub,sup,time,u,var,wbr,img,audio,video,source,track,picture,map,area,iframe,embed,object,param,canvas,script,noscript,template,ol,ul,li,dl,dt,dd,table,caption,colgroup,col,tbody,thead,tfoot,tr,th,td,form,textarea,button,select,option,optgroup,label,fieldset,legend,datalist,output,progress,meter,details,summary,dialog,figure,figcaption,ins,search,menu
 
+from bs4 import BeautifulSoup
+def create_any_tag(
+    tag_name,
+    tag_string,
+    i,
+    **attributes
+):
 
-# ============================================================
-# ANY TAG
-# ============================================================
+    if tag_name == "img":
 
-def create_any_tag(tag_name, tag_string, i):
+        dom = img(
+            src=attributes.get("src"),
+            width=attributes.get("width"),
+            height=attributes.get("height"),
+            _class=f"{tag_name}-tag-{i}"
+        )
 
-    dom = eval(
-        f"{tag_name}("
-        f"tag_string,"
-        f"_class=f'{tag_name}-tag-{i}'"
-        f")"
-    )
+    else:
+
+        dom = eval(
+            f"{tag_name}("
+            f"tag_string,"
+            f"_class=f'{tag_name}-tag-{i}'"
+            f")"
+        )
 
     return str(dom)
-
-
 # ============================================================
 # CREATE TAG LIST
 # ============================================================
@@ -130,6 +138,37 @@ def create_recursive_html(
 
 
     # ========================================================
+    # SPECIAL CASE: IMG
+    # ========================================================
+
+    if tag_name == "img" and isinstance(tag_content, dict):
+
+        results = []
+
+        for img_name, img_data in tag_content.items():
+
+            if not isinstance(img_data, dict):
+                continue
+
+            counter[tag_name] = (
+                counter.get(tag_name, 0) + 1
+            )
+
+            results.append(
+                create_any_tag(
+                    tag_name,
+                    "",
+                    counter[tag_name],
+                    src=img_data.get("src"),
+                    width=img_data.get("width"),
+                    height=img_data.get("height")
+                )
+            )
+
+        return results
+
+
+    # ========================================================
     # LIST
     #
     # Example:
@@ -212,8 +251,6 @@ def create_recursive_html(
                 counter[tag_name]
             )
         ]
-
-
 # ============================================================
 # CREATE LIST OF ANY TAGS - LEVEL 1
 # ============================================================
@@ -352,20 +389,39 @@ if __name__ == "__main__":
             "div": {
                 "p": [
                     "p1",
-                 ],
-                 "b":{
-                    "b":['b1']*10000,
-                    "b":['b2']*10000,
-                    "b":{
-                        "h1":["h1"]*1000
+                ]*1000,
+
+                "b": {
+                    "b": [
+                        "b1"
+                    ],
+
+                    "b": [
+                        "b2"
+                    ],
+
+                    "h1": [
+                        "h1"
+                    ]
+                },
+
+                "img": {
+                    "img1": {
+                        "src": "image1.jpg",
+                        "width": 500,
+                        "height": 300
+                    },
+
+                    "img2": {
+                        "src": "image2.jpg",
+                        "width": 800,
+                        "height": 600
                     }
                 }
             }
         }
-        
 
     ]
-
     html_page = automate_html_generation(
         tag_names,
         "Test Page"
