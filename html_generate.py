@@ -162,20 +162,20 @@ def automate_html_generation(tag_names, title):
     html_page = create_complete_html_page(title, "".join(rv))
     return html_page   
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     tag_names = [
-#         {
-#             "div": ["Hello1","Hello2"]
-#         },
-#         {
-#             "li": ["Item 1", "Item 2", "Item 3"]
-#         },
-#         {
-#             "b": ["Bold 1", "Bold 2"]
-#         },
-#     ]
+    tag_names = [
+        {
+            "div": ["Hello1","Hello2"]*100
+        },
+        {
+            "li": ["Item 1", "Item 2", "Item 3"]*1000
+        },
+        {
+            "b": ["Bold 1", "Bold 2"]*10
+        },
+    ]
 
-#     html_page = automate_html_generation(tag_names, "Test Page")
-#     print(html_page)
+    html_page = automate_html_generation(tag_names, "Test Page")
+    print(html_page)
 
