@@ -13,9 +13,7 @@ import random
 from multiprocessing import Manager
 
 from htbuilder import div
-from htbuilder import div, ul, li, img, b, p
-
-
+from htbuilder import html,head,title,meta,link,body,header,nav,main,section,div,h1,h2,h3,p,a,img,ul,li,button,footer,b,h4,h5
 # ============================================================
 # DIV TAG
 # ============================================================
@@ -562,7 +560,11 @@ if __name__ == "__main__":
                     "p1",
                  ],
                  "b":{
-                    "b":['b1']*10000
+                    "b":['b1']*10000,
+                    "b":['b2']*10000,
+                    "b":{
+                        "h1":["h1"]*1000
+                    }
                 }
             }
         }
@@ -572,7 +574,7 @@ if __name__ == "__main__":
 
     html_page = automate_html_generation(
         tag_names,
-        "The world bows at the legends feet. He won the world cup!"
+        "Test Page"
     )
 
     print(html_page)
