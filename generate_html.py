@@ -356,7 +356,8 @@ def create_complete_html_page(
 
 def automate_html_generation(
     tag_names,
-    title
+    title,
+    num_of_html_pages
 ):
 
     created_tags = create_list_of_any_tags(
@@ -373,8 +374,11 @@ def automate_html_generation(
         title,
         "".join(rv)
     )
-
-    return html_page
+    
+    html_pages = []
+    for i in range(num_of_html_pages):
+        html_pages.append(html_page)
+    return html_pages
 
 
 # ============================================================
@@ -422,9 +426,9 @@ if __name__ == "__main__":
         }
 
     ]
-    html_page = automate_html_generation(
+    html_pages = automate_html_generation(
         tag_names,
-        "Test Page"
+        "From a boy with a dream!",
+        int(pow(10,6))
     )
-
-    print(html_page)
+    print((html_pages)[0])
