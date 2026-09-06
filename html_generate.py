@@ -90,20 +90,55 @@ def create_any_tag(tag_name,tag_string,i):
     dom = eval(f"{tag_name}(tag_string,_class=f'{tag_name}-tag-{i}')")
     return str(dom)
 
-def create_list_of_any_tags(tag_names,tag_strings,progress_bar):
+def create_list_of_any_tags_1(my_dicts):
+    
+    # my_dicts = my_dicts[0]
+    # print(f"my_dicts = {my_dicts}")
+    # return 0
     num_cores = max(multiprocessing.cpu_count()//2,1)
+    
     results = []
-    for i in range(len(tag_names)):
+    tag_name = list(my_dicts.keys())[0]
+    tag_strings = list(my_dicts.values())[0]
+    # print(f"Tag name: {tag_name}, Tag strings: {tag_strings}")
+    
+    for i in range(len(tag_strings)):
         my_dict = {
-            "tag_name": tag_names[i],
+            "tag_name": tag_name,
             "tag_string": tag_strings[i],
             "i":(i+1)
         }
         results.append(my_dict)
+    # print(f"Results: {results}")
     with WorkerPool(n_jobs=num_cores,daemon=False) as pool:
-        results = pool.map(create_any_tag, results, progress_bar=progress_bar)
+        results = pool.map(create_any_tag, results, progress_bar=True)
+    # print(f"results = {results}")
     return results
 
+def create_list_of_any_tags_2(tag_names):
+    num_cores = max(multiprocessing.cpu_count()//2,1)
+    
+    results = []
+    for my_dict in tag_names:
+        my_dict2 = {
+            "my_dicts":my_dict
+        }
+        results.append(my_dict2)
+    with WorkerPool(n_jobs=num_cores,daemon=False) as pool:
+        results = pool.map(create_list_of_any_tags_1, results, progress_bar=True)
+    return results
+        
+def create_list_of_any_tags(tag_names):
+    num_cores = max(multiprocessing.cpu_count()//2,1)
+    results = []
+    i = 0
+    rv = []
+    # print("Tag names: ", tag_names)
+    # results = create_list_of_any_tags_1(tag_names)
+    results = create_list_of_any_tags_2(tag_names)
+    return results
+    
+   
 def create_complete_html_page(title,body_content):
     html = f"""
     <!DOCTYPE html>
@@ -118,14 +153,29 @@ def create_complete_html_page(title,body_content):
     """
     return html
 
-def automate_html_generation(tag_names, tag_strings, title, progress_bar=True):
-    created_tags = create_list_of_any_tags(tag_names, tag_strings, progress_bar)
-    html_page = create_complete_html_page(title, "".join(created_tags))
+def automate_html_generation(tag_names, title):
+    created_tags = create_list_of_any_tags(tag_names)
+    rv = []
+    for create_tag in created_tags:
+        rv+=create_tag
+    # print(f"Created tags: {rv}")
+    html_page = create_complete_html_page(title, "".join(rv))
     return html_page   
 
-if __name__ == "__main__":
-    tag_names = ["div", "li", "b", "img"]
-    tag_strings = ["Hello", "World", "This", "Is", "A", "Test"]
-    progress_bar = True 
-    html_page = automate_html_generation(tag_names, tag_strings, "Test Page", progress_bar)
-    print(html_page)
+# if __name__ == "__main__":
+    
+#     tag_names = [
+#         {
+#             "div": ["Hello1","Hello2"]
+#         },
+#         {
+#             "li": ["Item 1", "Item 2", "Item 3"]
+#         },
+#         {
+#             "b": ["Bold 1", "Bold 2"]
+#         },
+#     ]
+
+#     html_page = automate_html_generation(tag_names, "Test Page")
+#     print(html_page)
+
