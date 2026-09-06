@@ -572,7 +572,7 @@ if __name__ == "__main__":
 
     html_page = automate_html_generation(
         tag_names,
-        "Test Page"
+        "The world bows at the legends feet. He won the world cup!"
     )
 
     print(html_page)
