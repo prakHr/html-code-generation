@@ -92,15 +92,11 @@ def create_any_tag(tag_name,tag_string,i):
 
 def create_list_of_any_tags_1(my_dicts):
     
-    # my_dicts = my_dicts[0]
-    # print(f"my_dicts = {my_dicts}")
-    # return 0
     num_cores = max(multiprocessing.cpu_count()//2,1)
     
     results = []
     tag_name = list(my_dicts.keys())[0]
     tag_strings = list(my_dicts.values())[0]
-    # print(f"Tag name: {tag_name}, Tag strings: {tag_strings}")
     
     for i in range(len(tag_strings)):
         my_dict = {
@@ -133,8 +129,6 @@ def create_list_of_any_tags(tag_names):
     results = []
     i = 0
     rv = []
-    # print("Tag names: ", tag_names)
-    # results = create_list_of_any_tags_1(tag_names)
     results = create_list_of_any_tags_2(tag_names)
     return results
     
@@ -158,7 +152,6 @@ def automate_html_generation(tag_names, title):
     rv = []
     for create_tag in created_tags:
         rv+=create_tag
-    # print(f"Created tags: {rv}")
     html_page = create_complete_html_page(title, "".join(rv))
     return html_page   
 
