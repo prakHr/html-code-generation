@@ -13,7 +13,6 @@ import random
 from multiprocessing import Manager
 from htbuilder import html,head,title,base,link,meta,style,body,header,nav,main,section,article,aside,footer,address,h1,h2,h3,h4,h5,h6,p,br,hr,pre,blockquote,div,span,a,abbr,b,bdi,bdo,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,strong,sub,sup,time,u,var,wbr,img,audio,video,source,track,picture,map,area,iframe,embed,object,param,canvas,script,noscript,template,ol,ul,li,dl,dt,dd,table,caption,colgroup,col,tbody,thead,tfoot,tr,th,td,form,textarea,button,select,option,optgroup,label,fieldset,legend,datalist,output,progress,meter,details,summary,dialog,figure,figcaption,ins,search,menu
 
-from bs4 import BeautifulSoup
 def create_any_tag(
     tag_name,
     tag_string,
